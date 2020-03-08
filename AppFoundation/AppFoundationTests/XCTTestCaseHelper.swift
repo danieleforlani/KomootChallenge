@@ -8,22 +8,21 @@
 
 import XCTest
 
-public extension XCTestCase {
-
+extension XCTestCase {
     @discardableResult
-    public func setup(_ setupBlock: () -> Void) -> XCTestCase {
+    func setup(_ setupBlock: () -> Void) -> XCTestCase {
         setupBlock()
         return self
     }
 
     @discardableResult
-    public func test(_ testBlock: () -> Void) -> XCTestCase {
+    func test(_ testBlock: () -> Void) -> XCTestCase {
         testBlock()
         return self
     }
 
     @discardableResult
-    public func verify(_ verifyBlock: () -> Void) -> XCTestCase {
+    func verify(_ verifyBlock: () -> Void) -> XCTestCase {
         verifyBlock()
         return self
     }

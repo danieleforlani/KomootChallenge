@@ -13,7 +13,13 @@
 		22BBD6E52409560000A9C834 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22BBD6E42409560000A9C834 /* Assets.xcassets */; };
 		22BBD6E82409560000A9C834 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22BBD6E72409560000A9C834 /* Preview Assets.xcassets */; };
 		22BBD6EB2409560000A9C834 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22BBD6E92409560000A9C834 /* LaunchScreen.storyboard */; };
-		22BBD6F62409560100A9C834 /* LittleWalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BBD6F52409560100A9C834 /* LittleWalkTests.swift */; };
+		22CD924A241253340074FB8E /* FlickrInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD9249241253340074FB8E /* FlickrInteractor.swift */; };
+		22CD924C241253640074FB8E /* FlickrAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD924B241253640074FB8E /* FlickrAPI.swift */; };
+		22CD9250241253D40074FB8E /* FlickrInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD924F241253D40074FB8E /* FlickrInteractorTests.swift */; };
+		22CD92522412540C0074FB8E /* FlickrAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD92512412540C0074FB8E /* FlickrAPITests.swift */; };
+		22CD925824126E870074FB8E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD925724126E870074FB8E /* Constants.swift */; };
+		22CD925A241279830074FB8E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD9259241279830074FB8E /* Constants.swift */; };
+		22CD925C2412BB490074FB8E /* XCTTestCaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD925B2412BB490074FB8E /* XCTTestCaseHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,8 +42,15 @@
 		22BBD6EA2409560000A9C834 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		22BBD6EC2409560000A9C834 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22BBD6F12409560000A9C834 /* LittleWalkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LittleWalkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		22BBD6F52409560100A9C834 /* LittleWalkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittleWalkTests.swift; sourceTree = "<group>"; };
 		22BBD6F72409560100A9C834 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22CD9249241253340074FB8E /* FlickrInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrInteractor.swift; sourceTree = "<group>"; };
+		22CD924B241253640074FB8E /* FlickrAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPI.swift; sourceTree = "<group>"; };
+		22CD924E241253D40074FB8E /* LittleWalkTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LittleWalkTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		22CD924F241253D40074FB8E /* FlickrInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrInteractorTests.swift; sourceTree = "<group>"; };
+		22CD92512412540C0074FB8E /* FlickrAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPITests.swift; sourceTree = "<group>"; };
+		22CD925724126E870074FB8E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		22CD9259241279830074FB8E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		22CD925B2412BB490074FB8E /* XCTTestCaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTTestCaseHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,9 +92,11 @@
 		22BBD6DD240955FE00A9C834 /* LittleWalk */ = {
 			isa = PBXGroup;
 			children = (
+				22CD92482412529B0074FB8E /* Architecture */,
 				22BBD6DE240955FE00A9C834 /* AppDelegate.swift */,
 				22BBD6E0240955FE00A9C834 /* SceneDelegate.swift */,
 				22BBD6E2240955FE00A9C834 /* ContentView.swift */,
+				22CD925724126E870074FB8E /* Constants.swift */,
 				22BBD6E42409560000A9C834 /* Assets.xcassets */,
 				22BBD6E92409560000A9C834 /* LaunchScreen.storyboard */,
 				22BBD6EC2409560000A9C834 /* Info.plist */,
@@ -101,10 +116,31 @@
 		22BBD6F42409560100A9C834 /* LittleWalkTests */ = {
 			isa = PBXGroup;
 			children = (
-				22BBD6F52409560100A9C834 /* LittleWalkTests.swift */,
+				22CD925B2412BB490074FB8E /* XCTTestCaseHelper.swift */,
+				22CD924D241253A10074FB8E /* Architecture */,
 				22BBD6F72409560100A9C834 /* Info.plist */,
+				22CD9259241279830074FB8E /* Constants.swift */,
 			);
 			path = LittleWalkTests;
+			sourceTree = "<group>";
+		};
+		22CD92482412529B0074FB8E /* Architecture */ = {
+			isa = PBXGroup;
+			children = (
+				22CD9249241253340074FB8E /* FlickrInteractor.swift */,
+				22CD924B241253640074FB8E /* FlickrAPI.swift */,
+			);
+			path = Architecture;
+			sourceTree = "<group>";
+		};
+		22CD924D241253A10074FB8E /* Architecture */ = {
+			isa = PBXGroup;
+			children = (
+				22CD924F241253D40074FB8E /* FlickrInteractorTests.swift */,
+				22CD924E241253D40074FB8E /* LittleWalkTests-Bridging-Header.h */,
+				22CD92512412540C0074FB8E /* FlickrAPITests.swift */,
+			);
+			path = Architecture;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,6 +196,7 @@
 					};
 					22BBD6F02409560000A9C834 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 						TestTargetID = 22BBD6DA240955FE00A9C834;
 					};
 				};
@@ -211,6 +248,9 @@
 				22BBD6DF240955FE00A9C834 /* AppDelegate.swift in Sources */,
 				22BBD6E1240955FE00A9C834 /* SceneDelegate.swift in Sources */,
 				22BBD6E3240955FE00A9C834 /* ContentView.swift in Sources */,
+				22CD924A241253340074FB8E /* FlickrInteractor.swift in Sources */,
+				22CD924C241253640074FB8E /* FlickrAPI.swift in Sources */,
+				22CD925824126E870074FB8E /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,7 +258,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22BBD6F62409560100A9C834 /* LittleWalkTests.swift in Sources */,
+				22CD9250241253D40074FB8E /* FlickrInteractorTests.swift in Sources */,
+				22CD925C2412BB490074FB8E /* XCTTestCaseHelper.swift in Sources */,
+				22CD92522412540C0074FB8E /* FlickrAPITests.swift in Sources */,
+				22CD925A241279830074FB8E /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +446,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L9M785TFVT;
 				INFOPLIST_FILE = LittleWalkTests/Info.plist;
@@ -414,6 +458,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Flowprocess.LittleWalkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LittleWalkTests/Architecture/LittleWalkTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LittleWalk.app/LittleWalk";
@@ -425,6 +471,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L9M785TFVT;
 				INFOPLIST_FILE = LittleWalkTests/Info.plist;
@@ -436,6 +483,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Flowprocess.LittleWalkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LittleWalkTests/Architecture/LittleWalkTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LittleWalk.app/LittleWalk";

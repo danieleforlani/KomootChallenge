@@ -21,12 +21,25 @@
 		223AEFCD22D8F5780020F977 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223AEFC922D8F5780020F977 /* NetworkingTests.swift */; };
 		223AEFD322D8F6830020F977 /* Dispatchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223AEFD122D8F6830020F977 /* Dispatchable.swift */; };
 		223AEFD922D8F6B30020F977 /* DispatchableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223AEFD822D8F6B30020F977 /* DispatchableTests.swift */; };
+		22888A74240D18E50049CCFD /* InjectionContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22888A73240D18E50049CCFD /* InjectionContainer.swift */; };
+		22888A76240D18FA0049CCFD /* InjectionContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22888A75240D18FA0049CCFD /* InjectionContainerTests.swift */; };
+		22888A78240D34510049CCFD /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22888A77240D34510049CCFD /* DataStore.swift */; };
+		22888A7A240D47500049CCFD /* DataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22888A79240D47500049CCFD /* DataStoreTests.swift */; };
+		22888A7E240D47E80049CCFD /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22888A7D240D47E80049CCFD /* PersistentStore.swift */; };
+		22888A80240D53760049CCFD /* PersistentStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22888A7F240D53760049CCFD /* PersistentStoreTests.swift */; };
+		22888A83240D68A00049CCFD /* DataStoreModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22888A81240D68A00049CCFD /* DataStoreModel.xcdatamodeld */; };
 		22B9A51822FDBA0200E12734 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B9A51722FDBA0200E12734 /* Scheduler.swift */; };
 		22B9A51A22FDBB3500E12734 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B9A51922FDBB3500E12734 /* SchedulerTests.swift */; };
 		22BBD70124095D9100A9C834 /* JsonEncoderHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BBD70024095D9100A9C834 /* JsonEncoderHelperTests.swift */; };
 		22BBD7032409600100A9C834 /* XCTTestCaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BBD7022409600100A9C834 /* XCTTestCaseHelper.swift */; };
 		22C9EFD522F9759100571EE1 /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9EFD422F9759100571EE1 /* DataHelper.swift */; };
 		22C9EFD722F975F300571EE1 /* DataHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C9EFD622F975F300571EE1 /* DataHelperTests.swift */; };
+		22CD92542412547C0074FB8E /* LocationNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD92532412547C0074FB8E /* LocationNotifier.swift */; };
+		22CD92562412548D0074FB8E /* LocationNotifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD92552412548D0074FB8E /* LocationNotifierTests.swift */; };
+		22CD9261241541FA0074FB8E /* LocatrionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD9260241541FA0074FB8E /* LocatrionManager.swift */; };
+		22CD9263241542040074FB8E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD9262241542040074FB8E /* Location.swift */; };
+		22CD9265241543B80074FB8E /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD9264241543B80074FB8E /* LocationTests.swift */; };
+		22CD9267241547800074FB8E /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD9266241547800074FB8E /* PersistentContainer.swift */; };
 		22F3B5C922DDEDE8008263E4 /* JsonEncoderHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F3B5C822DDEDE8008263E4 /* JsonEncoderHelper.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,12 +72,25 @@
 		223AEFC922D8F5780020F977 /* NetworkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkingTests.swift; path = Network/NetworkingTests.swift; sourceTree = "<group>"; };
 		223AEFD122D8F6830020F977 /* Dispatchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatchable.swift; sourceTree = "<group>"; };
 		223AEFD822D8F6B30020F977 /* DispatchableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DispatchableTests.swift; path = Helpers/DispatchableTests.swift; sourceTree = "<group>"; };
+		22888A73240D18E50049CCFD /* InjectionContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionContainer.swift; sourceTree = "<group>"; };
+		22888A75240D18FA0049CCFD /* InjectionContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionContainerTests.swift; sourceTree = "<group>"; };
+		22888A77240D34510049CCFD /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		22888A79240D47500049CCFD /* DataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreTests.swift; sourceTree = "<group>"; };
+		22888A7D240D47E80049CCFD /* PersistentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
+		22888A7F240D53760049CCFD /* PersistentStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStoreTests.swift; sourceTree = "<group>"; };
+		22888A82240D68A00049CCFD /* DataStoreModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataStoreModel.xcdatamodel; sourceTree = "<group>"; };
 		22B9A51722FDBA0200E12734 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		22B9A51922FDBB3500E12734 /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
 		22BBD70024095D9100A9C834 /* JsonEncoderHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JsonEncoderHelperTests.swift; path = Helpers/JsonEncoderHelperTests.swift; sourceTree = "<group>"; };
 		22BBD7022409600100A9C834 /* XCTTestCaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTTestCaseHelper.swift; sourceTree = "<group>"; };
 		22C9EFD422F9759100571EE1 /* DataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHelper.swift; sourceTree = "<group>"; };
 		22C9EFD622F975F300571EE1 /* DataHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHelperTests.swift; sourceTree = "<group>"; };
+		22CD92532412547C0074FB8E /* LocationNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationNotifier.swift; sourceTree = "<group>"; };
+		22CD92552412548D0074FB8E /* LocationNotifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationNotifierTests.swift; sourceTree = "<group>"; };
+		22CD9260241541FA0074FB8E /* LocatrionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocatrionManager.swift; sourceTree = "<group>"; };
+		22CD9262241542040074FB8E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		22CD9264241543B80074FB8E /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
+		22CD9266241547800074FB8E /* PersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
 		22F3B5C822DDEDE8008263E4 /* JsonEncoderHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonEncoderHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +116,10 @@
 		221B49C622EB17620092662D /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				22888A77240D34510049CCFD /* DataStore.swift */,
+				22CD9266241547800074FB8E /* PersistentContainer.swift */,
+				22888A7D240D47E80049CCFD /* PersistentStore.swift */,
+				22888A81240D68A00049CCFD /* DataStoreModel.xcdatamodeld */,
 			);
 			name = Store;
 			sourceTree = "<group>";
@@ -115,7 +145,7 @@
 		223AEF9222D8F2FD0020F977 /* AppFoundation */ = {
 			isa = PBXGroup;
 			children = (
-				22F4284A23574FF90010D7BB /* Authentication */,
+				22F4284A23574FF90010D7BB /* Location */,
 				221B49C622EB17620092662D /* Store */,
 				223AEFC022D8F5560020F977 /* Network */,
 				223AEFBA22D8F3960020F977 /* Helpers */,
@@ -128,7 +158,7 @@
 		223AEF9D22D8F2FD0020F977 /* AppFoundationTests */ = {
 			isa = PBXGroup;
 			children = (
-				22F4284D2357502E0010D7BB /* Authentication */,
+				22F4284D2357502E0010D7BB /* Location */,
 				22A9B87B22EEF3CB0017FF9A /* Store */,
 				223AEFC822D8F5780020F977 /* Mocks.swift */,
 				223AEFD722D8F6A60020F977 /* Helpers */,
@@ -149,6 +179,7 @@
 				22F3B5C822DDEDE8008263E4 /* JsonEncoderHelper.swift */,
 				22B9A51722FDBA0200E12734 /* Scheduler.swift */,
 				22362C982301993500CBD2CF /* DateHelper.swift */,
+				22888A73240D18E50049CCFD /* InjectionContainer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -179,7 +210,9 @@
 				22C9EFD622F975F300571EE1 /* DataHelperTests.swift */,
 				22B9A51922FDBB3500E12734 /* SchedulerTests.swift */,
 				22362C9A2301995400CBD2CF /* DateHelperTests.swift */,
+				22BBD7022409600100A9C834 /* XCTTestCaseHelper.swift */,
 				22BBD70024095D9100A9C834 /* JsonEncoderHelperTests.swift */,
+				22888A75240D18FA0049CCFD /* InjectionContainerTests.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -187,23 +220,29 @@
 		22A9B87B22EEF3CB0017FF9A /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				22BBD7022409600100A9C834 /* XCTTestCaseHelper.swift */,
+				22888A79240D47500049CCFD /* DataStoreTests.swift */,
+				22888A7F240D53760049CCFD /* PersistentStoreTests.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
 		};
-		22F4284A23574FF90010D7BB /* Authentication */ = {
+		22F4284A23574FF90010D7BB /* Location */ = {
 			isa = PBXGroup;
 			children = (
+				22CD92532412547C0074FB8E /* LocationNotifier.swift */,
+				22CD9260241541FA0074FB8E /* LocatrionManager.swift */,
+				22CD9262241542040074FB8E /* Location.swift */,
 			);
-			name = Authentication;
+			name = Location;
 			sourceTree = "<group>";
 		};
-		22F4284D2357502E0010D7BB /* Authentication */ = {
+		22F4284D2357502E0010D7BB /* Location */ = {
 			isa = PBXGroup;
 			children = (
+				22CD92552412548D0074FB8E /* LocationNotifierTests.swift */,
+				22CD9264241543B80074FB8E /* LocationTests.swift */,
 			);
-			name = Authentication;
+			name = Location;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -338,16 +377,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22888A78240D34510049CCFD /* DataStore.swift in Sources */,
 				2220C88E2358A7110026A1E4 /* NotificationCenterHelper.swift in Sources */,
 				223AEFC422D8F5650020F977 /* Networking.swift in Sources */,
+				22CD9267241547800074FB8E /* PersistentContainer.swift in Sources */,
 				22F3B5C922DDEDE8008263E4 /* JsonEncoderHelper.swift in Sources */,
+				22CD9263241542040074FB8E /* Location.swift in Sources */,
 				223AEFC622D8F5650020F977 /* Result.swift in Sources */,
 				223AEFBE22D8F5400020F977 /* Enums.swift in Sources */,
 				223AEFD322D8F6830020F977 /* Dispatchable.swift in Sources */,
 				221C48F322EB2E180075B575 /* ApiError.swift in Sources */,
+				22CD9261241541FA0074FB8E /* LocatrionManager.swift in Sources */,
 				22362C992301993500CBD2CF /* DateHelper.swift in Sources */,
 				22C9EFD522F9759100571EE1 /* DataHelper.swift in Sources */,
+				22CD92542412547C0074FB8E /* LocationNotifier.swift in Sources */,
+				22888A74240D18E50049CCFD /* InjectionContainer.swift in Sources */,
 				22B9A51822FDBA0200E12734 /* Scheduler.swift in Sources */,
+				22888A7E240D47E80049CCFD /* PersistentStore.swift in Sources */,
+				22888A83240D68A00049CCFD /* DataStoreModel.xcdatamodeld in Sources */,
 				223AEFBD22D8F5400020F977 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,10 +404,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				223AEFCD22D8F5780020F977 /* NetworkingTests.swift in Sources */,
+				22888A7A240D47500049CCFD /* DataStoreTests.swift in Sources */,
 				22B9A51A22FDBB3500E12734 /* SchedulerTests.swift in Sources */,
 				22BBD70124095D9100A9C834 /* JsonEncoderHelperTests.swift in Sources */,
+				22888A76240D18FA0049CCFD /* InjectionContainerTests.swift in Sources */,
 				22BBD7032409600100A9C834 /* XCTTestCaseHelper.swift in Sources */,
+				22CD9265241543B80074FB8E /* LocationTests.swift in Sources */,
+				22CD92562412548D0074FB8E /* LocationNotifierTests.swift in Sources */,
 				223AEFD922D8F6B30020F977 /* DispatchableTests.swift in Sources */,
+				22888A80240D53760049CCFD /* PersistentStoreTests.swift in Sources */,
 				22362C9B2301995400CBD2CF /* DateHelperTests.swift in Sources */,
 				223AEFCC22D8F5780020F977 /* Mocks.swift in Sources */,
 				22C9EFD722F975F300571EE1 /* DataHelperTests.swift in Sources */,
@@ -626,6 +678,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		22888A81240D68A00049CCFD /* DataStoreModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				22888A82240D68A00049CCFD /* DataStoreModel.xcdatamodel */,
+			);
+			currentVersion = 22888A82240D68A00049CCFD /* DataStoreModel.xcdatamodel */;
+			path = DataStoreModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 223AEF8722D8F2FD0020F977 /* Project object */;
 }

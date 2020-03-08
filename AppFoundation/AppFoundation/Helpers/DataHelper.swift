@@ -11,7 +11,9 @@ import Foundation
 extension Data {
     public var escaped: Data? {
         let unescapedData = String(data: self, encoding: .utf8)
-        return unescapedData?.replacingOccurrences(of: "\n", with: "\\n")
-            .replacingOccurrences(of: "\\\"", with: "\\\\\"").data(using: .utf8)
+        return unescapedData?
+            .replacingOccurrences(of: "\n", with: "\\n")
+            .replacingOccurrences(of: "\\\"", with: "\\\\\"")
+            .data(using: .utf8)
     }
 }

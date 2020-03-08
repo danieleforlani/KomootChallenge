@@ -6,11 +6,11 @@
 //  Copyright © 2018 Scheggia. All rights reserved.
 //
 
-import Foundation
+@testable import AppFoundation
 import LocalAuthentication
 import UIKit
-@testable import AppFoundation
 import XCTest
+import CoreLocation
 
 class MockNetworking: NetworkingType {
 
@@ -274,5 +274,34 @@ class MockCache: CacheType {
     func storeCachedResponse(_ cachedResponse: CachedURLResponse, for request: URLRequest) {
         storeCachedResponseCounter += 1
         cachedResponseSpy = cachedResponse
+    }
+}
+
+class MockLocationManager: LocationManagerType {
+
+    var enabled = false
+    func locationServicesEnabled() -> Bool {
+        enabled
+    }
+
+    var status: CLAuthorizationStatus = .denied
+    func authorizationStatus() -> CLAuthorizationStatus {
+        status
+    }
+
+
+    var startMonitoringCounter = 0
+    func startMonitoringSignificantLocationChanges() {
+        startMonitoringCounter += 1
+    }
+
+    var stopMonitoringCounter = 0
+    func stopMonitoringSignificantLocationChanges() {
+        stopMonitoringCounter += 1
+    }
+
+    var requestAlwaysAuthorizationCounter = 0
+    func requestAlwaysAuthorization() {
+        requestAlwaysAuthorizationCounter += 1
     }
 }

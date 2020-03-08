@@ -20,6 +20,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>LittleWalk use your location to receive images of the surroundings. The data never leave the device.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>LittleWalk use your location to receive images of the surroundings. The data never leave the device.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

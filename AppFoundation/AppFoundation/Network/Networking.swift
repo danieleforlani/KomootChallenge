@@ -9,18 +9,11 @@
 import UIKit
 
 public protocol NetworkingType {
-    var token: String { get set }
     init(_ session: URLSession, dispatchable: DispatchableType)
     func load<T: DataBuildable>(_ request: URLRequest,
                                 completion: @escaping (Result<T, ApiError>) -> Void) -> URLSessionDataTask?
-    func loadEnriched<T: DataBuildable>(_ request: URLRequest,
-                                        completion: @escaping (Result<T, ApiError>) -> Void) -> URLSessionDataTask?
     func load(_ request: URLRequest,
               completion: @escaping (Result<Data, ApiError>) -> Void) -> URLSessionDataTask?
-    func load(_ request: URLRequest,
-              cache: CacheType,
-              completion: @escaping (Result<Data, ApiError>) -> Void) -> URLSessionDataTask?
-
     func cleanCache(_ cache: CacheType)
 }
 
@@ -52,7 +45,6 @@ public protocol CacheType {
 extension URLCache: CacheType {}
 
 public class Networking: NetworkingType {
-    public var token: String = "Bearer null"
     private var session: URLSession
     private var dispatchable: DispatchableType
 
@@ -61,49 +53,37 @@ public class Networking: NetworkingType {
         self.dispatchable = dispatchable
     }
 
-    fileprivate func enrich(_ request: URLRequest) -> URLRequest {
-        var enrichedRequest = request
-        enrichedRequest.addValue(contenType, forHTTPHeaderField: contenTypeKey)
-        enrichedRequest.addValue(acceptHeader, forHTTPHeaderField: acceptHeaderKey)
-        return enrichedRequest
-    }
-
-    @discardableResult
-    public func load<T: DataBuildable>(_ request: URLRequest,
-                                       completion: @escaping (Result<T, ApiError>) -> Void) -> URLSessionDataTask? {
-        let enrichedRequest = enrich(request)
-        return loadEnriched(enrichedRequest, completion: completion)
-    }
-
-    public func loadEnriched<T: DataBuildable>
+    public func load<T: DataBuildable>
         (_ request: URLRequest,
          completion: @escaping (Result<T, ApiError>) -> Void) -> URLSessionDataTask? {
 
-        loadEnriched(request, cache: URLCache.shared, completion: completion)
+        load(request, cache: URLCache.shared, completion: completion)
     }
 
-    public func loadEnriched<T: DataBuildable>
+    public func load<T: DataBuildable>
         (_ request: URLRequest,
          cache: CacheType?,
          completion: @escaping (Result<T, ApiError>) -> Void) -> URLSessionDataTask? {
-        if request.httpMethod == "GET",
+
+        if request.httpMethod == HTTPMethod.GET.rawValue,
             let cache = cache,
             let data = cache.cachedResponse(for: request)?.data,
             let result: T = T.build(from: data) as? T {
-            self.dispatchable.mainAsync { completion(.success(result)) }
+            completion(.success(result))
         }
 
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
             if let error = error {
-                self.dispatchable.mainAsync { completion(.failure(ApiError.build(with: error))) }
+                completion(.failure(ApiError.build(with: error)))
                 return
             }
             guard let data = data else {
-                self.dispatchable.mainAsync { completion(.failure(networkError)) }
+                completion(.failure(networkError))
                 return
             }
             if let apiError = ApiError.build(from: data) {
-                return self.dispatchable.mainAsync { completion(.failure(apiError)) }
+                completion(.failure(apiError))
+                return
             }
 
             guard let result: T = T.build(from: data) as? T else {
@@ -112,10 +92,11 @@ public class Networking: NetworkingType {
                     let httpResponse = response as? HTTPURLResponse {
                     appError = ApiError(code: httpResponse.statusCode, message: error)
                 }
-                return self.dispatchable.mainAsync { completion(.failure(appError)) }
+                completion(.failure(appError))
+                return
             }
 
-            if request.httpMethod == "GET",
+            if request.httpMethod == HTTPMethod.GET.rawValue,
                 let response = response,
                 let httpResponse = response as? HTTPURLResponse,
                 httpResponse.statusCode > 199,
@@ -125,11 +106,10 @@ public class Networking: NetworkingType {
             }
             if let httpResponse = response as? HTTPURLResponse,
                 httpResponse.statusCode > 299 {
-                self.dispatchable.mainAsync {
-                    completion(.failure(ApiError(code: httpResponse.statusCode,
-                                                 message: "Error \(httpResponse.statusCode) \(result)"))) }
+                completion(.failure(ApiError(code: httpResponse.statusCode,
+                                             message: "Error \(httpResponse.statusCode) \(result)")))
             } else {
-                self.dispatchable.mainAsync { completion(.success(result)) }
+                completion(.success(result))
             }
         })
         task.resume()
@@ -173,4 +153,11 @@ public class Networking: NetworkingType {
     public func cleanCache(_ cache: CacheType = URLCache.shared) {
         cache.removeAllCachedResponses()
     }
+}
+
+public enum HTTPMethod: String {
+    case DELETE
+    case GET
+    case POST
+    case PUT
 }

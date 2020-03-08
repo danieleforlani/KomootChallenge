@@ -7,14 +7,69 @@
 //
 
 import XCTest
+@testable import AppFoundation
+import CoreData
+
+// DO create a Mock file this goes there
 
 struct User: Codable {
     var name: String
     var surname: String
     var age = 42
 }
-extension User: Hashable {
+extension User: Hashable { }
+extension User: MOTransformable {
+    func managedObject(_ context: NSManagedObjectContext) -> NSManagedObject {
+        let managedObject = UserMO(context: context)
+        managedObject.name = name
+        managedObject.surname = surname
+        managedObject.age = NSNumber(value: age)
 
+        return managedObject
+    }
+
+    var idKey: String {
+        "name"
+    }
+    var idValue: String {
+        name
+    }
+}
+
+@objc(UserMO)
+class UserMO: NSManagedObject { }
+extension UserMO {
+    @NSManaged public var name: String?
+    @NSManaged public var surname: String?
+    @NSManaged public var age: NSNumber?
+}
+
+struct Server: Codable {
+    var name: String
+    var ip: String
+}
+extension Server: Hashable { }
+extension Server: MOTransformable {
+    func managedObject(_ context: NSManagedObjectContext) -> NSManagedObject {
+        let managedObject = ServerMO(context: context)
+        managedObject.name = name
+        managedObject.ip = ip
+
+        return managedObject
+    }
+
+    var idKey: String {
+        "name"
+    }
+    var idValue: String {
+        name
+    }
+}
+
+class ServerMO: NSManagedObject { }
+extension ServerMO {
+    @NSManaged public var name: String?
+    @NSManaged public var ip: String?
 }
 
 class JsonEncoderHelperTests: XCTestCase {

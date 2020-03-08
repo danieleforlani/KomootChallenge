@@ -33,13 +33,6 @@ class NetworkingTests: XCTestCase {
         XCTAssertEqual(session.dataTask?.resumeCounter, 1)
     }
 
-    func test_load_shouldEnrichRequest() {
-        _ = sut.load(request) { (_: Result<MockDataBuildable, ApiError>) in }
-
-        XCTAssertEqual(session.requestSpy?.allHTTPHeaderFields?[acceptHeaderKey], "application/json, text/plain, */*")
-        XCTAssertEqual(session.requestSpy?.allHTTPHeaderFields?[contenTypeKey], "application/json")
-    }
-
     var request: URLRequest {
         guard let url = URL(string: "http://www.johnlewis.com") else {
             fatalError()
@@ -52,7 +45,7 @@ class NetworkingTests: XCTestCase {
 
         var isSuccessfullSpy = false
         var dataSpy: MockDataBuildable?
-        sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
+        _ = sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
             isSuccessfullSpy = result.isSuccess
             dataSpy = result.result
         }
@@ -67,7 +60,7 @@ class NetworkingTests: XCTestCase {
                                                    httpVersion: nil,
                                                    headerFields: nil)
         var isSuccessfullSpy = false
-        sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
+        _ = sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
             isSuccessfullSpy = result.isSuccess
             XCTAssertEqual(result.error?.code, 300)
             XCTAssertEqual(result.error?.message, "Error 300 MockDataBuildable(test: \"testData\")")
@@ -81,7 +74,7 @@ class NetworkingTests: XCTestCase {
 
         var isSuccessfullSpy = true
         var dataSpy: MockDataBuildable?
-        sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
+        _ = sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
             isSuccessfullSpy = result.isSuccess
             dataSpy = result.result
         }
@@ -92,7 +85,7 @@ class NetworkingTests: XCTestCase {
     func test_load_shouldCallCompletion_withFailure_whenThereIsNoData () {
         var isSuccessfullSpy = true
         var dataSpy: MockDataBuildable?
-        sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
+        _ = sut.load(request) { (result: Result<MockDataBuildable, ApiError>) in
             isSuccessfullSpy = result.isSuccess
             dataSpy = result.result
         }
@@ -106,7 +99,7 @@ class NetworkingTests: XCTestCase {
         let comparisonData = image!.pngData()
         var isSuccessfullSpy = false
         var imageSpy: UIImage?
-        sut.load(URLRequest(url: imageUrl)) { (result: Result<UIImage, ApiError>) in
+        _ = sut.load(URLRequest(url: imageUrl)) { (result: Result<UIImage, ApiError>) in
             isSuccessfullSpy = result.isSuccess
             imageSpy = result.result
         }
@@ -123,7 +116,7 @@ class NetworkingTests: XCTestCase {
 
         var isSuccessfullSpy = true
         var dataSpy: UIImage?
-        sut.load(URLRequest(url: imageUrl)) { (result: Result<UIImage, ApiError>) in
+        _ = sut.load(URLRequest(url: imageUrl)) { (result: Result<UIImage, ApiError>) in
             isSuccessfullSpy = result.isSuccess
             dataSpy = result.result
         }
@@ -136,7 +129,7 @@ class NetworkingTests: XCTestCase {
         var isSuccessfullSpy = true
         var dataSpy: UIImage?
         var error: ApiError?
-        sut.load(URLRequest(url: imageUrl)) { (result: Result<UIImage, ApiError>) in
+        _ = sut.load(URLRequest(url: imageUrl)) { (result: Result<UIImage, ApiError>) in
             isSuccessfullSpy = result.isSuccess
             dataSpy = result.result
             error = result.error
@@ -210,7 +203,7 @@ class NetworkingTests: XCTestCase {
        session.injectedData = data
 
         cache.injectedCachedURLResponse = CachedURLResponse(response: URLResponse(), data: data)
-        _ = sut.loadEnriched(request, cache: cache) { (_: Result<MockDataBuildable, ApiError>) in }
+        _ = sut.load(request, cache: cache) { (_: Result<MockDataBuildable, ApiError>) in }
         XCTAssertEqual(cache.cachedResponseCounter, 1)
         XCTAssertEqual(cache.requestSpy, request)
     }
@@ -219,7 +212,7 @@ class NetworkingTests: XCTestCase {
         session.injectedData = "testData".data(using: .utf8)
         session.injectedResponse = HTTPURLResponse()
 
-        _ = sut.loadEnriched(request, cache: cache) { (_: Result<MockDataBuildable, ApiError>) in }
+        _ = sut.load(request, cache: cache) { (_: Result<MockDataBuildable, ApiError>) in }
         XCTAssertEqual(cache.storeCachedResponseCounter, 1)
     }
 

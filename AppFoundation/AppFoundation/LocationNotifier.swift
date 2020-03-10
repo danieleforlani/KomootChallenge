@@ -23,6 +23,10 @@ public class LocationNotifier: NSObject {
 
     public init(locationManager: LocationManagerType = CLLocationManager()) {
         self.locationManager  = locationManager
+        self.locationManager.allowsBackgroundLocationUpdates = true
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        super.init()
+        self.locationManager.delegate = self
     }
 }
 
@@ -42,18 +46,24 @@ extension LocationNotifier: LocationNotifierType {
     }
 
     public func startMonitoring(onLocationChange: @escaping (Location) -> Void) {
-        locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.startMonitoring()
         onLocation = onLocationChange
     }
 
     public func stopMonitoring() {
-        locationManager.stopMonitoringSignificantLocationChanges()
+        locationManager.stopMonitoring()
     }
 }
 
 extension LocationNotifier {
-    public func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
-        onLocation?(Location(visit.coordinate.latitude,
-                            visit.coordinate.longitude))
+
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        onLocation?(Location(location.coordinate.latitude,
+                            location.coordinate.longitude))
+    }
+
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error in location manager: \(error)")
     }
 }

@@ -55,7 +55,7 @@ class DataStoreTests: XCTestCase {
         test {
             sut.save(user)
         }.verify {
-            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: UserMO.self))
+            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: MOUser.self))
             XCTAssertEqual(users?.count, 1)
             XCTAssertEqual(users?.first?.name, "Daniele")
             XCTAssertEqual(users?.first?.surname, "Forlani")
@@ -72,7 +72,7 @@ class DataStoreTests: XCTestCase {
         test {
             sut.save(user)
         }.verify {
-            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: UserMO.self))
+            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: MOUser.self))
             XCTAssertEqual(users?.first?.age?.intValue, 43)
         }
     }
@@ -86,7 +86,7 @@ class DataStoreTests: XCTestCase {
         }.test {
             sut.delete(userOne)
         }.verify {
-            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: UserMO.self))
+            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: MOUser.self))
             XCTAssertEqual(users?.count, 1)
             XCTAssertEqual(users?.first?.name, userTwo.name)
         }
@@ -101,7 +101,7 @@ class DataStoreTests: XCTestCase {
         }.test {
             sut.cleanAll()
         }.verify {
-            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: UserMO.self))
+            let users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self, entityType: MOUser.self))
             XCTAssertEqual(users?.count, 0)
         }
     }
@@ -115,7 +115,7 @@ class DataStoreTests: XCTestCase {
             sut.save(userTwo)
         }.test {
             users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self,
-                                                                                  entityType: UserMO.self))
+                                                                                  entityType: MOUser.self))
         }.verify {
             XCTAssertEqual(users?.count, 2)
         }
@@ -124,7 +124,7 @@ class DataStoreTests: XCTestCase {
     func test_fetch_shouldReturnUsers_inCorrectOrder() {
         let userOne = User(name: "Daniele", surname: "Forlani", age: 44)
         let userTwo = User(name: "Forlani", surname: "Daniele", age: 42)
-        var users: [UserMO]?
+        var users: [MOUser]?
         setup {
             sut.save(userOne)
             sut.save(userTwo)
@@ -133,7 +133,7 @@ class DataStoreTests: XCTestCase {
                             .container?
                             .viewContext
                             .fetch(sut.fetch(User.self,
-                                 entityType: UserMO.self,
+                                 entityType: MOUser.self,
                                  descriptors: [NSSortDescriptor(key: "age", ascending: true)]))
         }.verify {
             XCTAssertEqual(users?.first?.age, 42)
@@ -144,13 +144,13 @@ class DataStoreTests: XCTestCase {
     func test_fetch_shouldReturnUsers_filtered() {
         let userOne = User(name: "Daniele", surname: "Forlani", age: 40)
         let userTwo = User(name: "Forlani", surname: "Daniele", age: 42)
-        var users: [UserMO]?
+        var users: [MOUser]?
         setup {
             sut.save(userOne)
             sut.save(userTwo)
         }.test {
             users = try? sut.container.container?.viewContext.fetch(sut.fetch(User.self,
-                                                                                  entityType: UserMO.self,
+                                                                                  entityType: MOUser.self,
                                                                                   predicateString: "age = 42"))
         }.verify {
             XCTAssertEqual(users?.count, 1)

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2224495D2417DB73000556E7 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2224495C2417DB73000556E7 /* Mocks.swift */; };
+		2224495F2417EEE7000556E7 /* PhotoModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2224495E2417EEE7000556E7 /* PhotoModelTests.swift */; };
+		225C97B72416785600AD4802 /* URLComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C97B62416785600AD4802 /* URLComposer.swift */; };
+		225C97B92416787A00AD4802 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225C97B82416787A00AD4802 /* PhotoModel.swift */; };
 		22BBD6DF240955FE00A9C834 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BBD6DE240955FE00A9C834 /* AppDelegate.swift */; };
 		22BBD6E1240955FE00A9C834 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BBD6E0240955FE00A9C834 /* SceneDelegate.swift */; };
 		22BBD6E3240955FE00A9C834 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BBD6E2240955FE00A9C834 /* ContentView.swift */; };
@@ -33,6 +37,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2224495C2417DB73000556E7 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
+		2224495E2417EEE7000556E7 /* PhotoModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModelTests.swift; sourceTree = "<group>"; };
+		225C97B62416785600AD4802 /* URLComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComposer.swift; sourceTree = "<group>"; };
+		225C97B82416787A00AD4802 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		22BBD6DB240955FE00A9C834 /* LittleWalk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LittleWalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BBD6DE240955FE00A9C834 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22BBD6E0240955FE00A9C834 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +128,7 @@
 				22CD924D241253A10074FB8E /* Architecture */,
 				22BBD6F72409560100A9C834 /* Info.plist */,
 				22CD9259241279830074FB8E /* Constants.swift */,
+				2224495C2417DB73000556E7 /* Mocks.swift */,
 			);
 			path = LittleWalkTests;
 			sourceTree = "<group>";
@@ -129,6 +138,8 @@
 			children = (
 				22CD9249241253340074FB8E /* FlickrInteractor.swift */,
 				22CD924B241253640074FB8E /* FlickrAPI.swift */,
+				225C97B62416785600AD4802 /* URLComposer.swift */,
+				225C97B82416787A00AD4802 /* PhotoModel.swift */,
 			);
 			path = Architecture;
 			sourceTree = "<group>";
@@ -139,6 +150,7 @@
 				22CD924F241253D40074FB8E /* FlickrInteractorTests.swift */,
 				22CD924E241253D40074FB8E /* LittleWalkTests-Bridging-Header.h */,
 				22CD92512412540C0074FB8E /* FlickrAPITests.swift */,
+				2224495E2417EEE7000556E7 /* PhotoModelTests.swift */,
 			);
 			path = Architecture;
 			sourceTree = "<group>";
@@ -249,7 +261,9 @@
 				22BBD6E1240955FE00A9C834 /* SceneDelegate.swift in Sources */,
 				22BBD6E3240955FE00A9C834 /* ContentView.swift in Sources */,
 				22CD924A241253340074FB8E /* FlickrInteractor.swift in Sources */,
+				225C97B72416785600AD4802 /* URLComposer.swift in Sources */,
 				22CD924C241253640074FB8E /* FlickrAPI.swift in Sources */,
+				225C97B92416787A00AD4802 /* PhotoModel.swift in Sources */,
 				22CD925824126E870074FB8E /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +276,8 @@
 				22CD925C2412BB490074FB8E /* XCTTestCaseHelper.swift in Sources */,
 				22CD92522412540C0074FB8E /* FlickrAPITests.swift in Sources */,
 				22CD925A241279830074FB8E /* Constants.swift in Sources */,
+				2224495F2417EEE7000556E7 /* PhotoModelTests.swift in Sources */,
+				2224495D2417DB73000556E7 /* Mocks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

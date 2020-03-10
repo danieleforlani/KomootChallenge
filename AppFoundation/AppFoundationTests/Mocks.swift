@@ -279,6 +279,11 @@ class MockCache: CacheType {
 
 class MockLocationManager: LocationManagerType {
 
+    var delegate: CLLocationManagerDelegate?
+    var distanceFilter: CLLocationDistance = 0.0
+    var allowsBackgroundLocationUpdates: Bool = false
+    var desiredAccuracy: CLLocationAccuracy = 0.0
+
     var enabled = false
     func locationServicesEnabled() -> Bool {
         enabled
@@ -291,12 +296,12 @@ class MockLocationManager: LocationManagerType {
 
 
     var startMonitoringCounter = 0
-    func startMonitoringSignificantLocationChanges() {
+    func startMonitoring() {
         startMonitoringCounter += 1
     }
 
     var stopMonitoringCounter = 0
-    func stopMonitoringSignificantLocationChanges() {
+    func stopMonitoring() {
         stopMonitoringCounter += 1
     }
 

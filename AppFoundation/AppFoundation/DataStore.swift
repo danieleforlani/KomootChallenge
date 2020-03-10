@@ -18,6 +18,7 @@ public protocol DataStoreType {
                                                        entityType: G.Type,
                                                        descriptors: [NSSortDescriptor]?,
                                                        predicateString: String?) -> NSFetchRequest<G>
+    func cleanAll()
 }
 
 public class DataStore: DataStoreType {
@@ -26,7 +27,7 @@ public class DataStore: DataStoreType {
     var entities: [String: [String]] = [:]
     var relations: [String: String] = [:]
 
-    var container: PersistentContainerType = PersistentContainer()
+    public var container: PersistentContainerType = PersistentContainer()
     var model: NSManagedObjectModel? {
         get {
             container.model

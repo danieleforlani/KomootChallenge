@@ -20,7 +20,7 @@ struct User: Codable {
 extension User: Hashable { }
 extension User: MOTransformable {
     func managedObject(_ context: NSManagedObjectContext) -> NSManagedObject {
-        let managedObject = UserMO(context: context)
+        let managedObject = MOUser(context: context)
         managedObject.name = name
         managedObject.surname = surname
         managedObject.age = NSNumber(value: age)
@@ -36,9 +36,9 @@ extension User: MOTransformable {
     }
 }
 
-@objc(UserMO)
-class UserMO: NSManagedObject { }
-extension UserMO {
+@objc(MOUser)
+class MOUser: NSManagedObject { }
+extension MOUser {
     @NSManaged public var name: String?
     @NSManaged public var surname: String?
     @NSManaged public var age: NSNumber?

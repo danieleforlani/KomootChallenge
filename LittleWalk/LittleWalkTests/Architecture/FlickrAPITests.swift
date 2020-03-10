@@ -24,10 +24,10 @@ class FlickrAPITests: XCTestCase {
         diContainer.register(NetworkingType.self) {
             self.networking
         }
-        sut = FlickrAPI(container: diContainer)
+        sut = FlickrAPI(networking: networking)
     }
 
-    func test_notifications_shouldCallNetworking_withCorrectResult() {
+    func test_photoSearch_shouldCallNetworking_withCorrectResult() {
         let expect = expectation(description: "completion called")
         var flickr: Flickr?
         setup {
@@ -54,7 +54,7 @@ class FlickrAPITests: XCTestCase {
         }
     }
 
-    func test_notifications__shouldFail_whenErrorOccour() {
+    func test_photoSearch_shouldFail_whenErrorOccour() {
         let expect = expectation(description: "completion called")
         var error: ApiError?
         setup {
@@ -71,6 +71,43 @@ class FlickrAPITests: XCTestCase {
             XCTAssertEqual(error?.message, "force error")
         }
     }
+
+    func test_image_shouldCallNetworking_withCorrectResult() {
+        let expect = expectation(description: "completion called")
+        var image: UIImage?
+        setup {
+            guard let data = photoSearchSample.data(using: .utf8)
+                else { return XCTFail("The data need to exist to display the values")}
+            networking.injected = data
+        }.test {
+            sut.image(url: URL(string: "http://apple.com")!) { (result: Result<UIImage, ApiError>) in
+                image = result.result
+                expect.fulfill()
+            }
+            wait(for: [expect], timeout: 1.0)
+        }.verify {
+            XCTAssertEqual(self.networking.loaderCounter, 1)
+            XCTAssertNotNil(image)
+        }
+    }
+
+    func test_image_shouldFail_whenErrorOccour() {
+        let expect = expectation(description: "completion called")
+        var error: ApiError?
+        setup {
+            networking.injectedError = ApiError(code: 401, message: "force error")
+        }.test {
+            sut.image(url: URL(string: "http://apple.com")!) { (result: Result<UIImage, ApiError>) in
+                error = result.error
+                expect.fulfill()
+            }
+            wait(for: [expect], timeout: 1.0)
+        }.verify {
+            XCTAssertEqual(self.networking.loaderCounter, 1)
+            XCTAssertEqual(error?.code, 3000)
+            XCTAssertEqual(error?.message, "Something went wrong, please retry later.")
+        }
+    }
 }
 
 class URLComposerTests: XCTestCase {
@@ -78,7 +115,7 @@ class URLComposerTests: XCTestCase {
     var sut = URLComposer()
 
     func test_photoSearch_shouldReturnCorrectURL() {
-        XCTAssertEqual(sut.photoSearch(location: Location( 1, 2))?.absoluteString, "https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=2da49d8fb63c9dc26bc8d5006be413ca&per_page=1&method=1.0&method=2.0&format=json&nojsoncallback=1")
+        XCTAssertEqual(sut.photoSearch(location: Location( 1, 2))?.absoluteString, "https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=2da49d8fb63c9dc26bc8d5006be413ca&per_page=20&lat=1.0&lon=2.0&format=json&nojsoncallback=1&radius=0.1")
     }
 
     func test_photoURL_shouldReturnCorrectURL() {
@@ -101,6 +138,8 @@ class MockNetworking: NetworkingType {
         loaderCounter += 1
         if let injected = injected {
             completion(.success(injected))
+        } else {
+            completion(.failure(unknowError))
         }
         return MockDataTask()
     }

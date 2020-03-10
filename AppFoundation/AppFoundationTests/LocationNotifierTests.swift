@@ -87,12 +87,14 @@ class LocationNotifierTests: XCTestCase {
         }
     }
 
-    func test_didVisit_shouldCallbackWithCorrectLocation() {
+    func test_didUpdateLocations_shouldCallbackWithCorrectLocation() {
         var locationChanged = 0
         setup {
             sut.startMonitoring { _ in locationChanged += 1 }
         }.test {
-            sut.locationManager(CLLocationManager(), didVisit: CLVisit())
+            sut.locationManager(CLLocationManager(),
+                                didUpdateLocations: [CLLocation(latitude: 1.0,
+                                                                longitude: 2.0)])
         }.verify {
             XCTAssertEqual(locationChanged, 1)
         }

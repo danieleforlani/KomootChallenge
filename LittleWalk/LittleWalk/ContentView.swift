@@ -7,15 +7,90 @@
 //
 
 import SwiftUI
+import AppFoundation
+import CoreData
 
 struct ContentView: View {
+    @EnvironmentObject var viewModel: ContentViewModel
+    var interactor: FlickrInteractorType
+    var context: NSManagedObjectContext
+    var subtitle: String {
+        switch viewModel.status {
+        case .active:
+            return "Walking..."
+        case .inactive:
+            return "Stopped"
+        case .cleaned:
+            return "Cleaned!"
+        }
+    }
+
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            HStack {
+                Button(action: {
+                    self.interactor.start(contentViewModel: self.viewModel)
+                }) {
+                    Text("Start").padding(.all, 8).background(Color.green.opacity(0.5)).cornerRadius(8).padding()
+                }
+                Spacer()
+                Button(action: {
+                    self.interactor.stop(self.viewModel)
+                }) {
+                    Text("Stop").padding(.all, 8).background(Color.red.opacity(0.5)).cornerRadius(12).padding()
+                }
+                Spacer()
+                Button(action: {
+                    self.interactor.reset(self.viewModel)
+                }) {
+                    Text("Reset").padding(.all, 8).background(Color.red.opacity(0.5)).cornerRadius(12).padding()
+                }
+            }
+            Text(self.subtitle)
+            LittleWalkView(interactor: interactor, request: interactor.fetchRequest()).environment(\.managedObjectContext, context)
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+struct LittleWalkView: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
+    var interactor: FlickrInteractorType
+    var request: FetchRequest<MOPhoto>
+    var photos: FetchedResults<MOPhoto> {
+        request.wrappedValue
     }
+
+    var body: some View {
+        List(photos) { photo in
+            ImageElement(url: photo.url, title: photo.title, interactor: self.interactor)
+        }
+    }
+}
+
+struct ImageElement: View {
+    var url: String?
+    var title: String?
+    @State var image: UIImage?
+
+    var interactor: FlickrInteractorType
+
+
+    var body: some View {
+        VStack {
+            Text(title ?? "")
+            if image != nil {
+                Image(uiImage: image ?? UIImage())
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 100, maxWidth: .infinity, minHeight: 160, maxHeight: 160)
+                    .clipped()
+            }
+        }.onAppear{
+            self.interactor.loadImage(urlString: self.url) { image in
+                self.image = image
+            }
+        }.frame(height: 200)
+
+    }
+
 }

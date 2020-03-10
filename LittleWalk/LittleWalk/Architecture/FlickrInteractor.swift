@@ -10,8 +10,18 @@ import AppFoundation
 import CoreData
 
 protocol FlickrInteractorType {
-    func start(authorizationViewModel: AuthorizationViewModel)
-    func stop()
+    func start(contentViewModel: ContentViewModel)
+    func stop(_ contentViewModel: ContentViewModel)
+    func loadImage(urlString: String?, completion: @escaping (UIImage) -> Void)
+    func isAutorized(_ contentViewModel: ContentViewModel) -> Bool
+    func fetchRequest() -> FetchRequest<MOPhoto>
+    func reset(_ contentViewModel: ContentViewModel)
+}
+
+enum FeatureStatus {
+    case active
+    case inactive
+    case cleaned
 }
 
 class FlickrInteractor {
@@ -20,15 +30,17 @@ class FlickrInteractor {
     private var dataStore: DataStoreType & PersistentStoreType
     private var flickrAPI: FlickrAPIType
     private var previousLocation: Location?
+    private var dispatchable: DispatchableType
 
     init(locationNotifier: LocationNotifierType,
          dataStore: DataStoreType & PersistentStoreType = DataStore(store: storeName),
          api: FlickrAPIType,
-         container: InjectionContainer) {
+         container: InjectionContainer, dispatchable: DispatchableType = Dispatchable()) {
         self.dataStore = dataStore
         self.flickrAPI = api
         self.container = container
         self.locationNotifier = locationNotifier
+        self.dispatchable = dispatchable
 
         container.register(DataStoreType.self) {
             self.dataStore
@@ -39,30 +51,33 @@ class FlickrInteractor {
                                                      ("secret", .stringAttributeType),
                                                      ("server", .stringAttributeType),
                                                      ("title", .stringAttributeType),
-                                                     ("farm", .integer16AttributeType)])
+                                                     ("farm", .integer16AttributeType),
+                                                     ("time", .doubleAttributeType),
+                                                     ("url", .stringAttributeType)])
         dataStore.createStore()
     }
 }
 
 extension FlickrInteractor: FlickrInteractorType {
 
-    func isAutozed(_ authorizationViewModel: AuthorizationViewModel) -> Bool {
+    //TODO: test this
+    func isAutorized(_ contentViewModel: ContentViewModel) -> Bool {
         guard locationNotifier.isEnabled else {
-            authorizationViewModel.isAuthorized = false
+            contentViewModel.isAuthorized = false
             return false
         }
-        authorizationViewModel.isAuthorized = true
         guard locationNotifier.isAuthorized else {
             locationNotifier.requestAuthorization()
             return false
         }
+        contentViewModel.isAuthorized = true
         return true
     }
 
-    func start(authorizationViewModel: AuthorizationViewModel) {
+    func start(contentViewModel: ContentViewModel) {
         let oneHundredMeters = 0.1
 
-        guard isAutozed(authorizationViewModel) else {
+        guard isAutorized(contentViewModel), contentViewModel.status != .active else {
             return
         }
         locationNotifier.startMonitoring() { location in
@@ -76,14 +91,16 @@ extension FlickrInteractor: FlickrInteractorType {
             self.previousLocation = location
             self.searchPhotos(on: location)
         }
+        contentViewModel.status = .active
     }
 
     private func searchPhotos(on location: Location) {
         flickrAPI.photoSearch(location: location) { result in
             switch result {
             case .success(let flickr):
-                if let photo = flickr.photos.photo.first {
-                    self.dataStore.save(photo)
+                let random = Int.random(in: 0..<flickr.photos.photo.count)
+                if flickr.photos.photo.first != nil {
+                    self.dataStore.save(flickr.photos.photo[random])
                 }
             case .failure(let error):
                 print("Error in calling the APIs of flicker :\(error)")
@@ -91,14 +108,47 @@ extension FlickrInteractor: FlickrInteractorType {
         }
     }
 
-    func stop() {
+    func stop(_ contentViewModel: ContentViewModel) {
         locationNotifier.stopMonitoring()
+        contentViewModel.status = .inactive
+    }
+
+    func reset(_ contentViewModel: ContentViewModel) {
+        dataStore.cleanAll()
+        contentViewModel.status = .cleaned
+    }
+
+    func loadImage(urlString: String?, completion: @escaping (UIImage) -> Void) {
+        guard let imageURL = urlString,
+              let url = URL(string: imageURL)
+            else { return }
+        flickrAPI.image(url: url) { result in
+            switch result {
+            case .success(let image):
+                self.dispatchable.mainAsync {
+                   completion(image)
+                }
+            case .failure(let error):
+                print("Error downloading the image \(error)")
+            }
+
+        }
+    }
+
+    func fetchRequest() -> FetchRequest<MOPhoto> {
+        FetchRequest(fetchRequest:
+            dataStore.fetch(Photo.self,
+                            entityType: MOPhoto.self,
+                            descriptors: [NSSortDescriptor(key: "time",
+                                                           ascending: false)],
+                            predicateString: nil))
     }
 }
 
 import SwiftUI
 
-class AuthorizationViewModel: ObservableObject {
+class ContentViewModel: ObservableObject {
     var noAuthoriationMessage = "Please enable the location to enjoy your Little Walk."
     @Published var isAuthorized = false
+    @Published var status: FeatureStatus = .inactive
 }

@@ -8,6 +8,8 @@
 
 @testable import LittleWalk
 import AppFoundation
+import CoreData
+import SwiftUI
 import XCTest
 
 class FlickrInteractorTests: XCTestCase {
@@ -17,8 +19,9 @@ class FlickrInteractorTests: XCTestCase {
     var persistentContainer = MockPersistentContainer()
     var dataStore: MockDataStore!
     var container = InjectionContainer()
-    var authorizationViewModel = AuthorizationViewModel()
+    var contentViewModel = ContentViewModel()
     var api = MockFlickrAPI()
+    var dispatchable = MockDispatchable()
 
     override func setUp() {
         super.setUp()
@@ -27,7 +30,8 @@ class FlickrInteractorTests: XCTestCase {
         sut = FlickrInteractor(locationNotifier: locationNotifier,
                                dataStore: dataStore,
                                api: api,
-                               container: container)
+                               container: container,
+                               dispatchable: dispatchable)
     }
 
     func test_init_shouldAddDataStore_inContainer() {
@@ -48,11 +52,42 @@ class FlickrInteractorTests: XCTestCase {
         XCTAssertEqual(dataStore.createStoreCounter, 1)
     }
 
+    func test_isAutorized_returnFalse_whenDisabled() {
+        setup {
+            locationNotifier.injectedIsAuthorized = false
+            locationNotifier.injectedIsEnabled = false
+        }.test {
+            XCTAssertFalse(sut.isAutorized(contentViewModel))
+            XCTAssertFalse(contentViewModel.isAuthorized)
+        }
+    }
+
+
+    func test_isAutorized_returnFalse_whenEnabled_butNotAuthorized() {
+        setup {
+            locationNotifier.injectedIsAuthorized = false
+            locationNotifier.injectedIsEnabled = true
+        }.test {
+            XCTAssertFalse(sut.isAutorized(contentViewModel))
+            XCTAssertFalse(contentViewModel.isAuthorized)
+        }
+    }
+
+    func test_isAutorized_returnTrue_whenEnabled_andAuthorized() {
+        setup {
+            locationNotifier.injectedIsAuthorized = true
+            locationNotifier.injectedIsEnabled = true
+        }.test {
+            XCTAssertTrue(sut.isAutorized(contentViewModel))
+            XCTAssertTrue(contentViewModel.isAuthorized)
+        }
+    }
+
     func test_start_shouldNotStart_whenNotAccess() {
         setup {
             locationNotifier.injectedIsAuthorized = false
         }.test {
-            sut.start(authorizationViewModel: authorizationViewModel)
+            sut.start(contentViewModel: contentViewModel)
         }.verify {
             XCTAssertEqual(locationNotifier.startMonitoringCounter, 0)
         }
@@ -62,17 +97,17 @@ class FlickrInteractorTests: XCTestCase {
         setup {
             locationNotifier.injectedIsAuthorized = false
         }.test {
-            sut.start(authorizationViewModel: authorizationViewModel)
+            sut.start(contentViewModel: contentViewModel)
         }.verify {
-            XCTAssertEqual(authorizationViewModel.isAuthorized, false)
+            XCTAssertEqual(contentViewModel.isAuthorized, false)
         }
     }
 
     func test_start_shouldRequestLocation_whenNotEnabled() {
         test {
-            sut.start(authorizationViewModel: authorizationViewModel)
+            sut.start(contentViewModel: contentViewModel)
         }.verify {
-            XCTAssertEqual(authorizationViewModel.isAuthorized, false)
+            XCTAssertEqual(contentViewModel.isAuthorized, false)
         }
     }
 
@@ -81,7 +116,7 @@ class FlickrInteractorTests: XCTestCase {
             locationNotifier.injectedIsAuthorized = true
             locationNotifier.injectedIsEnabled = true
         }.test {
-            sut.start(authorizationViewModel: authorizationViewModel)
+            sut.start(contentViewModel: contentViewModel)
         }.verify {
             XCTAssertEqual(locationNotifier.startMonitoringCounter, 1)
         }
@@ -92,7 +127,7 @@ class FlickrInteractorTests: XCTestCase {
             locationNotifier.injectedIsAuthorized = true
             locationNotifier.injectedIsEnabled = true
         }.test {
-            sut.start(authorizationViewModel: authorizationViewModel)
+            sut.start(contentViewModel: contentViewModel)
         }.verify {
             locationNotifier.onLocationChange?(Location(1, 1))
             locationNotifier.onLocationChange?(Location(1, 11))
@@ -105,133 +140,86 @@ class FlickrInteractorTests: XCTestCase {
             locationNotifier.injectedIsAuthorized = true
             locationNotifier.injectedIsEnabled = true
         }.test {
-            sut.start(authorizationViewModel: authorizationViewModel)
+            sut.start(contentViewModel: contentViewModel)
         }.verify {
             locationNotifier.onLocationChange?(Location(1, 10))
-            locationNotifier.onLocationChange?(Location(1, 10.001))
-            XCTAssertEqual(api.photoSearchCounter, 1)
+            locationNotifier.onLocationChange?(Location(1, 10.0001))
+            XCTAssertEqual(api.photoSearchCounter, 0)
+        }
+    }
+
+    func test_start_shouldSavePhoto() {
+        guard let data = photoSearchSample.data(using: .utf8),
+            let flickr = Flickr.build(from: data)
+            else { return XCTFail("data is necessary for this test")}
+        setup {
+            locationNotifier.injectedIsAuthorized = true
+            locationNotifier.injectedIsEnabled = true
+            api.injectedCompletionPhotoSerch = .success(flickr)
+        }.test {
+            sut.start(contentViewModel: contentViewModel)
+        }.verify {
+            locationNotifier.onLocationChange?(Location(1, 10))
+            locationNotifier.onLocationChange?(Location(1, 11))
+            XCTAssertEqual(dataStore.saveCounter, 1)
         }
     }
 
 
     func test_stop_shouldStopMonitoring() {
         test {
-            sut.stop()
+            sut.stop(contentViewModel)
         }.verify {
             XCTAssertEqual(locationNotifier.stopMonitoringCounter, 1)
         }
     }
 
-
-}
-
-class MockLocationNotifier: NSObject, LocationNotifierType {
-
-    var injectedIsEnabled = false
-    var isEnabled: Bool {
-        injectedIsEnabled
+    func test_reset_shouldCallREsetOnTheStore() {
+        test {
+            sut.reset(contentViewModel)
+        }.verify {
+            XCTAssertEqual(dataStore.cleanAllCounter, 1)
+        }
     }
 
-    var startMonitoringCounter = 0
-    var onLocationChange: ((Location) -> Void)?
-    func startMonitoring(onLocationChange: @escaping (Location) -> Void) {
-        startMonitoringCounter += 1
-        self.onLocationChange = onLocationChange
+    func test_loadImage_shouldLoadImageWhenSuccessResponse() {
+        var image: UIImage?
+        var completion = 0
+        setup {
+            api.injectedCompletion = .success(UIImage())
+        }.test {
+            sut.loadImage(urlString: "http://apple.com") { resultImage in
+                completion += 1
+                image = resultImage
+            }
+        }.verify {
+            XCTAssertEqual(completion, 1)
+            XCTAssertEqual(api.imageCounter, 1)
+            XCTAssertNotNil(image)
+        }
     }
 
-
-    var injectedIsAuthorized = false
-    var isAuthorized: Bool {
-        injectedIsAuthorized
+    func test_loadImage_shouldNotCallbackOnFailure() {
+        var image: UIImage?
+        var completion = 0
+        test {
+            sut.loadImage(urlString: "http://apple.com") { resultImage in
+                completion += 1
+                image = resultImage
+            }
+        }.verify {
+            XCTAssertEqual(completion, 0)
+            XCTAssertEqual(api.imageCounter, 1)
+            XCTAssertNil(image)
+        }
     }
 
-    var stopMonitoringCounter = 0
-    func stopMonitoring() {
-        stopMonitoringCounter += 1
-    }
-
-    var requestAuthorizationCounter = 0
-    func requestAuthorization() {
-        requestAuthorizationCounter += 1
-    }
-}
-
-import CoreData
-
-class MockDataStore: DataStoreType {
-    required init(store: String, container: PersistentContainerType) { }
-    var createStoreCounter = 0
-    var addEntityCounter = 0
-    var entitySpy = ""
-    func createStore() {
-        createStoreCounter += 1
-    }
-    func save<T: MOTransformable>(_ object: T) { }
-    func delete<T: MOTransformable>(_ object: T) { }
-    func fetch<T: MOTransformable, G: NSManagedObject>(_ protocolType: T.Type,
-                                                       entityType: G.Type,
-                                                       descriptors: [NSSortDescriptor]?,
-                                                       predicateString: String?) -> NSFetchRequest<G> {
-
-        return NSFetchRequest(entityName: "Flickr")
-    }
-}
-extension MockDataStore: PersistentStoreType {
-    func addEntity<T>(_ entityType: T.Type, attributes: [(String, NSAttributeType)]) where T : Decodable, T : Encodable {
-        addEntityCounter += 1
-        entitySpy = "\(entityType)"
-    }
-
-    func addRelations<T, G>(_ lhsEntityType: T.Type, _ rhsEntityType: G.Type, relation: DataStoreRelation) where T : Decodable, T : Encodable, G : Decodable, G : Encodable {
-    }
-
-
-}
-
-class MockPersistentContainer: NSObject, PersistentContainerType {
-
-    var model: NSManagedObjectModel?
-
-    var container: NSPersistentContainer?
-
-    func model(store: String) -> NSManagedObjectModel? { return nil }
-
-    func createStore(name: String) { }
-
-    func save<T>(_ object: T, _ context: ContextType) where T : MOTransformable { }
-
-    func delete<T>(_ object: T, _ context: ContextType) where T : MOTransformable { }
-
-    func delete(_ context: ContextType) { }
-
-    func commit() { }
-
-    func commit(_ context: ContextType) { }
-
-    func onBackground(_ completion: @escaping (NSManagedObjectContext) -> Void) { }
-
-    func fetch<T>(type: T.Type, _ context: ContextType, predicateString: String) -> [NSManagedObject]? where T : MOTransformable {
-        return nil
-    }
-}
-
-class MockFlickrAPI: FlickrAPIType {
-
-    var networking: NetworkingType = MockNetworking(URLSession.shared,
-                                    dispatchable: Dispatchable())
-
-    var injectedCompletion: Result<UIImage, ApiError> = .failure(unknowError)
-    var imageCounter = 0
-    func image(url: URL, completion: @escaping (Result<UIImage, ApiError>) -> Void) {
-        imageCounter += 0
-        completion(injectedCompletion)
-    }
-
-    var injectedCompletionPhotoSerch: Result<Flickr, ApiError> = .failure(unknowError)
-    var photoSearchCounter = 0
-    func photoSearch(location: Location,
-                     completion: @escaping (Result<Flickr, ApiError>) -> Void) {
-        photoSearchCounter += 1
-        completion(injectedCompletionPhotoSerch)
+    func test_fetchRequest_ShouldReturnCorrectRequest() {
+        var fetchRequest: FetchRequest<MOPhoto>?
+        test {
+            fetchRequest = sut.fetchRequest()
+        }.verify {
+            XCTAssertNotNil(fetchRequest)
+        }
     }
 }

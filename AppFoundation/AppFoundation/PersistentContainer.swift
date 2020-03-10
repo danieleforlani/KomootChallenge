@@ -88,7 +88,7 @@ public class PersistentContainer: PersistentContainerType {
         model?.entitiesByName.keys.forEach {
             _ = try? context.execute(NSBatchDeleteRequest(fetchRequest: NSFetchRequest(entityName: $0)))
         }
-
+        context.refreshAllObjects()
     }
 
     public func commit() {

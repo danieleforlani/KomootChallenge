@@ -29,7 +29,7 @@ extension DataStore: PersistentStoreType {
             attribute.attributeType = $0.1
             return attribute
         }
-        entity.managedObjectClassName = "\(T.self)MO"
+        entity.managedObjectClassName = "MO\(T.self)"
         entity.properties = entityAttributes
         model = save(entities: [entity], in: model?.copy(with: nil) as? NSManagedObjectModel)
     }

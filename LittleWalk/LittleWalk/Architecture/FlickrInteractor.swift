@@ -60,7 +60,6 @@ class FlickrInteractor {
 
 extension FlickrInteractor: FlickrInteractorType {
 
-    //TODO: test this
     func isAutorized(_ contentViewModel: ContentViewModel) -> Bool {
         guard locationNotifier.isEnabled else {
             contentViewModel.isAuthorized = false

@@ -24,12 +24,17 @@ struct ContentView: View {
             return "Cleaned!"
         }
     }
+    @State var presentAlert: Bool = false
 
     var body: some View {
         VStack {
             HStack {
                 Button(action: {
-                    self.interactor.start(contentViewModel: self.viewModel)
+                    if self.interactor.isAutorized(self.viewModel) {
+                        self.interactor.start(contentViewModel: self.viewModel)
+                    } else {
+                        self.presentAlert = true
+                    }
                 }) {
                     Text("Start").padding(.all, 8).background(Color.green.opacity(0.5)).cornerRadius(8).padding()
                 }
@@ -48,6 +53,10 @@ struct ContentView: View {
             }
             Text(self.subtitle)
             LittleWalkView(interactor: interactor, request: interactor.fetchRequest()).environment(\.managedObjectContext, context)
+        }.alert(isPresented: $presentAlert) {
+            Alert(title: Text("Location not enabled"),
+                  message: Text(viewModel.noAuthoriationMessage),
+                  dismissButton: Alert.Button.default(Text("OK")) { self.presentAlert = false })
         }
     }
 }
